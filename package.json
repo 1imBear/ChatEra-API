@@ -1,0 +1,32 @@
+{
+  "name": "chatera.server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel app -d dist",
+    "start": "npm run build && nodemon dist/index.js",
+    "serve": "node dist/index.js",
+    "test": "mocha --require @babel/register"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "babel-node": "^0.0.1-security",
+    "babel-polyfill": "^6.26.0",
+    "connection-string": "^4.3.5",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "mongodb": "^4.4.1",
+    "regenerator-runtime": "^0.13.9"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.7",
+    "@babel/node": "^7.16.8",
+    "@babel/preset-env": "^7.16.11",
+    "nodemon": "^2.0.15"
+  }
+}
