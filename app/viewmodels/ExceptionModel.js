@@ -1,33 +1,37 @@
 import ExceptionPrefix from "../src/ExceptionPrefix";
 
-class ExceptionModel {
+var ExceptionModel = {
 
-    statuscode = null;
-    statusview = null;
-    message = null;
-    result = null;
-
-    constructor(message, result = null){
-        this.statuscode = ExceptionPrefix.ExceptionStatus["FAIL"];
-        this.message = message;
-        this.result = result;
-    }
-    
-    map(statuscode, message, result){
-        
-    }
-
-    setStatusCode(obj){
-        this.statuscode = obj;
-        this.statusview = () => {
-            switch(statuscode){
-                case 200:
-                    return "OK";
-                default:
-                    return "FAIL";
-            }            
-        }
-    }
+    statuscode : ExceptionPrefix.ExceptionStatus["FAIL"],
+    statusview : null,
+    message : null,
+    result : null,
 }
 
-export default ExceptionModel
+let map = (statuscode, message, result) => {
+    ExceptionModel.statuscode = statuscode;
+    ExceptionModel.message = message;
+    ExceptionModel.result = result;
+    ExceptionModel.statusview = setStatusCode(statuscode);
+
+    return ExceptionModel;
+}
+
+let printError = (message) => {
+    ExceptionModel.message = message;
+    return ExceptionModel;
+}
+
+const setStatusCode = (statuscode) =>{
+    switch(statuscode){
+        case 200:
+            return "OK";
+        default:
+            return "FAIL";
+    }            
+}
+export default {
+    ExceptionModel,
+    map,
+    printError
+}
