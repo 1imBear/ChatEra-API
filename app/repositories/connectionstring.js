@@ -6,7 +6,8 @@ const client = new MongoClient(
             { 
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
-                serverApi: ServerApiVersion.v1 
+                serverApi: ServerApiVersion.v1,
+                maxPoolSize: 20
             });
 
 
