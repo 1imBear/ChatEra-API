@@ -6,14 +6,13 @@ import "regenerator-runtime/runtime"
 
 const router = Router();
 
-router.post('/login', async (req, res) => {
+router.post('/signup', async (req, res) => {
 
     try{
         var data = req.body;
 
         if(data) {
-            var userViewModel = new UserViewModel();
-            userViewModel.map(0, data["UserName"], data["Password"]);
+            var userViewModel = UserViewModel.map(null, data["UserName"], data["Password"]);
 
             await UserAuth.UserAuthentication(userViewModel)
             .then(result => {
@@ -25,7 +24,7 @@ router.post('/login', async (req, res) => {
     }
     catch(error){
         //Log Exception
-        res.json(new ExceptionModel(error.message));
+        res.json(ExceptionModel.printError(error.message));
     }
 });
 
@@ -33,8 +32,7 @@ router.post("/signin", async (req, res) => {
     try {
         var data = req.body;
         if(data){
-            var userViewModel = new UserViewModel();
-            userViewModel.map(data["UserName"], data["Password"]) 
+            var userViewModel = UserViewModel.map(null,data["UserName"], data["Password"]);
 
             await UserAuth.UserSignIn(userViewModel)
             .then(result => {
@@ -45,7 +43,7 @@ router.post("/signin", async (req, res) => {
         }
         
     } catch (error) {
-        res.json(new ExceptionModel(error.message));
+        res.json(ExceptionModel.printError(error.message));
     }
 })
 

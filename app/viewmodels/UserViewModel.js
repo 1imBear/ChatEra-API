@@ -1,16 +1,18 @@
-class UserViewModel{
-    Id = null;
-    UserName = null;
-    Password = null;
-
-    map (id, userName, password){
-        this.Id = id
-        this.UserName = userName;
-        this.Password = password;
-    }
-
-    constructor(){}
-    
+var UserViewModel = {
+    Id : null,
+    UserName : null,
+    Password : null, 
 }
 
-export default UserViewModel;
+let map = (id, userName, password) => {
+    UserViewModel.Id = id
+    UserViewModel.UserName = userName;
+    UserViewModel.Password = password;
+
+    return UserViewModel;
+}
+
+export default {
+    UserViewModel, 
+    map
+};
