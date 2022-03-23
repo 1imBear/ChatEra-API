@@ -2,7 +2,28 @@ import client from "./connectionstring";
 import "regenerator-runtime/runtime"
 import { async } from "regenerator-runtime/runtime";
 import UserModel from "../model/UserModel"
-import ExceptionModel from "../viewmodels/ExceptionModel"
+import { ObjectID } from "bson";
+
+const GetUserById = async (id) => {
+
+    try {
+            await client.connect();
+            const query = { _id: new ObjectID(id) };
+            const options = {
+                projection: { UserName: 1 },
+            };
+
+            const user = await client.db("chatera").collection("user").findOne(query, options);
+
+            return user;          
+
+      } catch (error) {
+          console.warn(error.message);
+      }
+      finally{
+          client.close();
+      }
+}
 
 const GetUserByUserName = async (username) => {
 
@@ -39,11 +60,35 @@ const CreateUser = async (usermodel) => {
     }
 }
 
-const UpdateUserById = async () => {
+const UpdateUserById = async (id, usermodel) => {
+    try {
+        await client.connect();
 
+        const query = [{
+            _id: new ObjectID(id)
+        },{
+            $set : {
+                UserName : usermodel.UserName,
+            }
+        }];
+        const options = [{
+            upsert : true
+        }];
+        const user = await client.db("chatera").collection("user").updateOne(query,options);
+
+        return user;          
+
+  } catch (error) {
+      console.warn(error.message);
+  }
+  finally{
+      client.close();
+  }
 }
 
 export default {
+    GetUserById,
     GetUserByUserName,
-    CreateUser
+    CreateUser,
+    UpdateUserById
 }

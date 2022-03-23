@@ -1,4 +1,4 @@
-import userAPI from "./userAPI"
+import userAPI from "./userAPI";
 
 
 export default {

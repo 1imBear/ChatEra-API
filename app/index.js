@@ -1,8 +1,8 @@
 import "dotenv/config"
 import cors from "cors";
 import express from "express";
-import routers from "./routers";
-import userAuth from "./auth"
+import userAuth from "./auth";
+import routers from "./routers"
 
 const app = express();
 
@@ -11,6 +11,7 @@ app.use(express.json());
 
 app.use('/auth', userAuth);
 
+app.use('/chat/user', routers.userAPI);
 /*
     TODO: Handle root directory
 */
