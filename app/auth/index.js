@@ -6,19 +6,20 @@ import "regenerator-runtime/runtime"
 
 const router = Router();
 
-router.post('/signup', async (req, res) => {
+router.post('/signin', async (req, res) => {
 
     try{
         var data = req.body;
 
         if(data) {
-            var userViewModel = UserViewModel.map(null, data["UserName"], data["Password"]);
+            var body = data;
+            var userViewModel = UserViewModel.map(null, body["UserName"], body["Password"]);
 
             await UserAuth.UserAuthentication(userViewModel)
-            .then(result => {
-                res.json({result});
+            .then(r => {
+                res.json(r);
             }).catch(err => {
-                res.json({err});
+                res.json(err);
             });
         }
     }
@@ -28,13 +29,13 @@ router.post('/signup', async (req, res) => {
     }
 });
 
-router.post("/signin", async (req, res) => {
+router.post("/signup", async (req, res) => {
     try {
         var data = req.body;
         if(data){
             var userViewModel = UserViewModel.map(null,data["UserName"], data["Password"]);
 
-            await UserAuth.UserSignIn(userViewModel)
+            await UserAuth.UserSignUp(userViewModel)
             .then(result => {
                 res.json(result);
             }).catch(err => {

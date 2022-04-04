@@ -64,17 +64,15 @@ const UpdateUserById = async (id, usermodel) => {
     try {
         await client.connect();
 
-        const query = [{
+        const user = await client.db("chatera").collection("user").updateOne({
             _id: new ObjectID(id)
         },{
             $set : {
                 UserName : usermodel.UserName,
             }
-        }];
-        const options = [{
+        },{
             upsert : true
-        }];
-        const user = await client.db("chatera").collection("user").updateOne(query,options);
+        });
 
         return user;          
 

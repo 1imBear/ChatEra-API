@@ -1,4 +1,4 @@
-import ExceptionPrefix from "../src/ExceptionPrefix";
+import ExceptionPrefix from "../helper/ExceptionPrefix";
 
 var ExceptionModel = {
 

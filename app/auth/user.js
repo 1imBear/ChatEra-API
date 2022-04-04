@@ -1,8 +1,9 @@
 import ExceptionModel from '../viewmodels/ExceptionModel';
-import ExceptionPrefix from '../src/ExceptionPrefix';
+import ExceptionPrefix from '../helper/ExceptionPrefix';
 import UserRepository from "../repositories/UserRepository"
 import "regenerator-runtime/runtime";
 import  User from "../model/UserModel";
+import MessageHelper from "../helper/ExceptionMessageHelper"
 
 async function UserAuthentication (userViewModel) {
     try{
@@ -10,7 +11,7 @@ async function UserAuthentication (userViewModel) {
             var result =  await UserRepository.GetUserByUserName(userViewModel.UserName).then(res => {
                 return PasswordAuthentication(res.Password, userViewModel.Password)
             }).catch(err => {
-                return err;
+                return ExceptionModel.map(ExceptionPrefix.ExceptionStatus["SUCCESS"], MessageHelper.UserAuthMsg.Error, err.message);
             })
             return await result;
         }
@@ -21,21 +22,21 @@ async function UserAuthentication (userViewModel) {
 }
 
 function PasswordAuthentication(ori, veri){
-    var result = new ExceptionModel();
-    result.result = false;
-    result.message = "UnAuthorize User";
-    result.setStatusCode(ExceptionPrefix.ExceptionStatus["SUCCESS"]);
+    var result = ExceptionModel.map(
+        ExceptionPrefix.ExceptionStatus["SUCCESS"],
+        MessageHelper.UserAuthMsg.Fail,
+        false);
     if(ori === veri){
         result.result = true;
-        result.message = "User Authorize Success";
+        result.message = MessageHelper.UserAuthMsg.Success;
     }
 
     return result;
 }
 
-async function UserSignIn(userViewModel) {
+async function UserSignUp(userViewModel) {
 
-    var result = ExceptionModel.printError("Input is not recornize");
+    var result = ExceptionModel.printError(MessageHelper.ResponseMsg.Body_Null);
     try {
         if(userViewModel){
             result = await UserNameVerify(userViewModel.UserName);
@@ -56,11 +57,11 @@ async function UserSignIn(userViewModel) {
 
 async function UserNameVerify(username){
     return UserRepository.GetUserByUserName(username).then(res => {
-        return  res == null ? true : ExceptionModel.map(ExceptionPrefix["SUCCESS"],  "User Name is already take", false);
+        return  res == null ? true : ExceptionModel.map(ExceptionPrefix["SUCCESS"],  MessageHelper.UserUpdateMsg.Conflick, false);
     });
 }
 
 export default {
     UserAuthentication,
-    UserSignIn
+    UserSignUp
 }
