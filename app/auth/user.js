@@ -28,7 +28,7 @@ function PasswordAuthentication(ori, veri){
         false);
     if(ori === veri){
         result.result = true;
-        result.message = MessageHelper.UserAuthMsg.Success;
+        result.message = MessageHelper.UserAuthMsg.OK;
     }
 
     return result;
@@ -39,13 +39,13 @@ async function UserSignUp(userViewModel) {
     var result = ExceptionModel.printError(MessageHelper.ResponseMsg.Body_Null);
     try {
         if(userViewModel){
-            result = await UserNameVerify(userViewModel.UserName);
+            result = await UserNameVerify(userViewModel.UserName) && UserPasswordVerify(userViewModel.Password);
             if(result == true){
                 var user = User.map(userViewModel);
                 result = await UserRepository.CreateUser(user).then(res => {   
-                    return res;
+                    return ExceptionModel.map(ExceptionPrefix.ExceptionStatus["SUCCESS"], MessageHelper.UserCreate.OK, res != null);
                 }).catch(err => {
-                    return err;
+                    return ExceptionModel.map(ExceptionPrefix.ExceptionStatus["SUCCESS"], MessageHelper.UserCreate.Fail, false);
                 });
             }
         }
@@ -56,10 +56,13 @@ async function UserSignUp(userViewModel) {
 }
 
 async function UserNameVerify(username){
+    if(username == null) return false
     return UserRepository.GetUserByUserName(username).then(res => {
         return  res == null ? true : ExceptionModel.map(ExceptionPrefix["SUCCESS"],  MessageHelper.UserUpdateMsg.Conflick, false);
     });
 }
+
+const UserPasswordVerify = (passwd) => {return passwd != null && passwd != undefined}
 
 export default {
     UserAuthentication,
