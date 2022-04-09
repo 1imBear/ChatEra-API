@@ -6,14 +6,19 @@ const GetUserById = async (id) => {
 
     await dbConnect();
     try {
-        const user = await UserModel.findOneById(id, {
-            projection: { UserName: 1 }
-        });
+        const user = await UserModel.findOne({
+            _id : id
+        })
+        .select({
+            _id : 1,
+            UserName : 1
+        })
+        .exec();
 
         return user;          
 
     } catch (error) {
-        throw error;
+        return new Error(error)
     }
 }
 
@@ -29,45 +34,36 @@ const GetUserByUserName = async (username) => {
             })
             .exec();
 
-        return user;          
+        return {
+            Id : user._id,
+            UserName : user.UserName
+        };          
 
     } catch (error) {
-        throw error;
-    }
-}
-
-const GetPasswordById = async (id, passwd) => {
-    const db = dbConnect();
-    try {
-        return await UserModel.findOne({
-            _id : id,
-            Password: passwd
-        })
-            .select({
-                Password: 1
-            })
-            .exec();        
-
-    } catch (error) {
-        throw error.message;
+        return new Error(error)
     }
 }
 
 const CreateUser = async (userViewModel) => {
     await dbConnect();
     try {
-        var user = await UserModel.create({
-            UserName: userViewModel.UserName,
-            Password : userViewModel.Password
+        var user = new UserModel({
+            UserName : userViewModel.UserName,
+            Password : userViewModel.Password,
+            Name : userViewModel.Name
         });
-        await user.save();
-        return {
-            id : user._id,
-            UserName : user.UserName
-        };
-        
+
+        return user.save().then(result => {
+            return {
+                Id : result._id,
+                UserName : result.UserName
+            }
+        }).catch(error => {
+            throw new Error(error);
+        })
+
     } catch (error) {
-        throw error;
+        throw new Error(error);
     }
 }
 
@@ -75,15 +71,15 @@ const UpdateUserById = async (id, userViewModel) => {
     await dbConnect();
     try {
         const user = await UserModel.findById(id);
-        user.UserName = userViewModel.UserName;
+        user.Name = userViewModel.Name;
         await user.save()
         return {
-            id : user._id,
+            PublicKey : user._id,
             UserName : user.UserName
         };          
 
     } catch (error) {
-        throw error.message;
+        return new Error(error)
     }
 }
 
@@ -92,5 +88,4 @@ export default {
     GetUserByUserName,
     CreateUser,
     UpdateUserById,
-    GetPasswordById
 }

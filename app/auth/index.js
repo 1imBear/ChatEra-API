@@ -10,11 +10,10 @@ router.post('/signin', async (req, res) => {
 
     try{
         var data = req.body;
-        await UserAuth.UserAuthentication(UserViewModel(data["UserName"], data["Password"]))
-        .then(result => {
+        UserAuth.UserAuthentication(UserViewModel(data["UserName"], data["Password"])).then(result => {
             res.json(result);
-        }).catch(err => {
-            res.json(err);
+        }).catch(error => {
+            res.json(error);
         });
     }
     catch(error){

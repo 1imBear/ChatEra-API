@@ -1,5 +1,4 @@
 import "regenerator-runtime";
-import User from "../../models/user/UserModel";
 import UserRepository from "../../repo/user/UserRepository";
 import ExceptionModel from "../../viewmodels/exception/ExceptionViewModel";
 import ExceptionPrefix from "../../helper/ExceptionPrefix";
