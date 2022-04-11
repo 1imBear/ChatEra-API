@@ -1,6 +1,9 @@
-import userAPI from "./userAPI";
-
+import user from "./user";
+import chat from "./chat";
+import member from "./member";
 
 export default {
-    userAPI
+    user,
+    chat,
+    member
 }

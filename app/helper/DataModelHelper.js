@@ -1,5 +1,7 @@
 
 export default {
     User: "User",
-    UserChat: "UserChat"
+    Chat: "Chat",
+    Member: "Member",
+    Message: "Message",
 }

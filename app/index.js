@@ -6,6 +6,7 @@ import userAuth from "./auth";
 import routers from "./routers"
 import path from "path"
 import fs from "fs";
+import db from "./repo"
 
 const app = express();
 
@@ -52,8 +53,7 @@ app.use(express.json());
 // })
 
 app.use('/auth', userAuth);
-
-app.use('/chat/user', routers.userAPI);
+app.use('/chat', routers.chat);
 /*
     TODO: Handle root directory
 */
@@ -65,10 +65,9 @@ const sslServer = https.createServer({
     ca : [
         fs.readFileSync(path.join("cert", "rootCA.crt")),
     ]
-    // pfx: fs.readFileSync(path.join("cert", "cert.pfx")) 
 }, app);
 
-sslServer.listen(
-    process.env.PORT,
-     () => console.log(`SSL Server is on port : ${process.env.PORT}`)
-     )
+sslServer.listen(process.env.PORT, async () => {
+    console.log(`HTTPs : ${process.env.PORT} is on live `);
+    await db.connect();
+});
