@@ -1,36 +1,25 @@
-import { Router } from "express"
-import "regenerator-runtime/runtime"
-import UserViewModel from "../viewmodels/user/UserViewModel"
-import UserAuth from "./user"
-import ExceptionHelper from "../helper/ExceptionHelper"
+import { Router } from "express";
+import "regenerator-runtime/runtime";
+import UserViewModel from "../viewmodels/UserViewModel";
+import UserAuth from "./user";
+import {ExceptionHelper, MappingHelper} from "../helper"
 
 const router = Router();
 
-router.post('/signin', async (req, res) => {
-
+router.post('/user', async (req, res) => {
     try{
-        var data = req.body;
-        UserAuth.UserAuthentication(UserViewModel(data["UserName"], data["Password"])).then(result => {
-            res.json(result);
-        }).catch(error => {
-            res.json(error);
-        });
+        const result = await UserAuth.UserAuthentication(MappingHelper(UserViewModel, req.body));
+        res.json(result);
     }
     catch(error){
         res.status(ExceptionHelper.ExceptionStatus.ERROR);
     }
 });
 
-router.post("/signup", async (req, res) => {
+router.post("/user/create", async (req, res) => {
     try {
-        var data = req.body;
-        await UserAuth.UserSignUp(UserViewModel(data["UserName"], data["Password"]))
-        .then(result => {
-            res.json(result);
-        }).catch(err => {
-            res.json(err);
-        })
-        
+        const result = await UserAuth.UserSignUp(MappingHelper(UserViewModel, req.body))
+        res.json(result);
     } catch (error) {
         res.status(ExceptionHelper.ExceptionStatus.ERROR);
     }
