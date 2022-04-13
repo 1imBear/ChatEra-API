@@ -19,7 +19,7 @@ const User = {
         ERROR : "Some input may wrong, please check again :)"
     },
     Delete: {
-
+        
     }
 }
 
@@ -31,6 +31,10 @@ const Chat = {
     Updare: {
         OK: "Chat successfull update",
         FAIL: "Chat fail to update"
+    },
+    Delete: {
+        OK: "Chat successfull delete",
+        FAIL: "Chat fail to delete"
     }
 }
 
