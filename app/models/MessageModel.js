@@ -2,6 +2,15 @@ import mongoose from "mongoose"
 import DataModelHelper from "../helper/DataModelHelper";
 
 var Message = new mongoose.Schema({
+    Chat:{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: DataModelHelper.Chat,
+        required: true,
+    },
+    PublicKey: {
+        type: String,
+        ref: DataModelHelper.User
+    },
     Content: {
         type: String,
         required: true
@@ -18,7 +27,4 @@ Message.pre('save', function (next) {
     next();
 })
 
-export default {
-    Model: Message,
-    Message: mongoose.model(DataModelHelper.Message, Message)
-}
+export default mongoose.model(DataModelHelper.Message, Message)

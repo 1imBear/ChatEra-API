@@ -1,20 +1,17 @@
 import mongoose from "mongoose";
 import DataModelHelper from "../helper/DataModelHelper";
-import MessageModel from "./MessageModel"
 
 var Member = new mongoose.Schema({
+    Chat: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: DataModelHelper.Chat,
+        require: true
+    },
     PublicKey: {
         type: String,
         ref: DataModelHelper.User
-    },
-    Messages: [{
-        type: MessageModel.Model, 
-        ref: DataModelHelper.Message
-    }],
+    }
 })
 
 
-export default {
-    Model: Member,
-    Member: mongoose.model(DataModelHelper.Member, Member)
-}
+export default mongoose.model(DataModelHelper.Member, Member)

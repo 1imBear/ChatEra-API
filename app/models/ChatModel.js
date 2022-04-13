@@ -1,21 +1,24 @@
 import mongoose from "mongoose"
 import DataModelHelper from "../helper/DataModelHelper";
-import MemberModel from "./MemberModel";
 
 var Chat = new mongoose.Schema({
-    Members: [{
-        type: MemberModel.Model,
-        ref: DataModelHelper.Member
-    }],
     Name: {
         type: String,
         required: true
     },
-    DateUpdate : {
+    DateUpdate: {
         type: Date,
         require: true,
         default: () => { return Date.now() }
     },
+    Members: [{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: DataModelHelper.Member
+    }],
+    Messages: [{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: DataModelHelper.Message
+    }]
 })
 
 Chat.pre('save', function (next) {

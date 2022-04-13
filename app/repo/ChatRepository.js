@@ -1,7 +1,10 @@
+import { ObjectId } from "mongodb";
 import "regenerator-runtime/runtime";
 import ChatModel from "../models/ChatModel";
 import MemberModel from "../models/MemberModel";
 import MessageModel from "../models/MessageModel";
+import MemberRepository from "./MemberRepository";
+import MessageRepository from "./MessageRepository";
 
 const GetOneById = async (id) => {
     try {    
@@ -24,20 +27,13 @@ const GetOneById = async (id) => {
 
 const CreateOne = async (chatViewModel) => {
     try {
-        var members = [];
-        chatViewModel.Members.forEach(key => {
-            members = [...members, new MemberModel.Member({
-                PublicKey: key
-            })]
-        });
-        
         var chat = new ChatModel({
-            Members: members,
             Name : chatViewModel.Name,
         });
+
         await chat.save();
 
-        return chat
+        return chat._id
     } catch (error) {
         throw new Error(error);
     }
@@ -62,61 +58,56 @@ const UpdateOneById = async (chatViewModel) => {
     }
 }
 
-const UpdateMemberById = async (chatViewModel) => {
+const UpdateMemberById = async (id) => {
     try {
+        var members = await MemberModel.find({
+            ChatId : new ObjectId(id)
+        })
+        .select({
+            _id: 1
+        })
+        .exec();
+
+        var messages = await MessageModel.find({
+            ChatId : new ObjectId(id)
+        })
+        .select({
+            _id: 1
+        })
+        .exec();
+        
         var chat = await ChatModel.findOne({
-            _id : chatViewModel.id
+            _id: id
         })
         .select({
             Members: 1
         })
         .exec();
-        
+
         if(chat){
-            chatViewModel.Members.forEach(async (key) => {
-                var i = await chat.Members.findIndex((_key) => _key.PublicKey == key)
-                if(i >= 0){
-                    chat.Members.splice(i, 1);
-                    return;
-                }
-                chat.Members.push(new  MemberModel.Member({
-                    PublicKey: key
-                })) 
-            });
+            chat.Members = members;
+            chat.Messages = messages;
             await chat.save();
+    
             return true;
         }
-1
         return false;
     } catch (error) {
         throw new Error(error);
     }
 }
 
-const UpdateMessageById = async (chatViewModel) => {
+const DeleteOneById = async (id) => {
     try {
-        var chat = await ChatModel.findOne({
-            _id : chatViewModel.id
+           
+        var result = await ChatModel.deleteOne({
+            _id: new ObjectId(id),
         })
-        .select({
-            Members: 1
-        })
-        .exec();
         
-        if(chat){
-            var member = await chat.Members.find((_key) => _key.PublicKey == chatViewModel.Members[0].PublicKey)
-            if(member){
-                chatViewModel.Members[0].Messages.forEach(key => {
-                    member.Messages.push(new MessageModel.Message({
-                        Content: key.Content
-                    }));
-                });
-                await chat.save();
-            }
-            return true;
-        }
-1
-        return false;
+        result = await MemberRepository.DeleteAllbyId(id);
+        result = await MessageRepository.DeleteAllById(id);
+
+        return result;
     } catch (error) {
         throw new Error(error);
     }
@@ -127,5 +118,5 @@ export default {
     CreateOne,
     UpdateOneById,
     UpdateMemberById,
-    UpdateMessageById,
+    DeleteOneById,
 }

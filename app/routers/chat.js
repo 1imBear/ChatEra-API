@@ -6,9 +6,19 @@ import { ExceptionHelper, MappingHelper } from "../helper"
 
 const router = Router();
 
+router.get("/getall/:id", async (req, res) => {
+    try{
+        const result = await ChatController.getAllById(req.params.id);
+        res.json(result);
+    }
+    catch(error){
+        res.status(ExceptionHelper.ExceptionStatus.ERROR);
+    }
+})
+
 router.post("/create", async (req, res) => {
     try{
-        const result = await ChatController.ChatCreate(MappingHelper(ChatViewModel, req.body));
+        const result = await ChatController.create(MappingHelper(ChatViewModel, req.body));
         res.json(result);
     }
     catch(error){
@@ -18,7 +28,7 @@ router.post("/create", async (req, res) => {
 
 router.post("/update", async (req, res) => {
     try{
-        const result = await ChatController.ChatUpdate(MappingHelper(ChatViewModel, req.body));
+        const result = await ChatController.update(MappingHelper(ChatViewModel, req.body));
         res.json(result);
     }
     catch(error){
@@ -26,19 +36,9 @@ router.post("/update", async (req, res) => {
     }
 })
 
-router.post("/member", async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
     try{
-        const result = await ChatController.MemberUpdate(MappingHelper(ChatViewModel, req.body));
-        res.json(result);
-    }
-    catch(error){
-        res.status(ExceptionHelper.ExceptionStatus.ERROR);
-    }
-})
-
-router.post("/member/message", async (req, res) => {
-    try{
-        const result = await ChatController.MessageUpdate(MappingHelper(ChatViewModel, req.body));
+        const result = await ChatController.remove(req.params.id);
         res.json(result);
     }
     catch(error){

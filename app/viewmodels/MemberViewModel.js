@@ -1,4 +1,5 @@
 export default {
+    id: String,
     PublicKey: String,
-    Message: Array
+    Messages: Array
 }

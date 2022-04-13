@@ -1,8 +1,6 @@
-import MemberViewMode from "./MemberViewModel"
-
 const chatViewModel = {
     id: String,
-    Members: [MemberViewMode],
+    Members: Array,
     Name: String
 }
 
