@@ -6,9 +6,15 @@ const DefaultAuthor = async (userName, passwd) => {
         var user = await UserModel.findOne({
             UserName : userName,
         })
+        .select({
+            _id: 1,
+            PublicKey: 1
+        })
         .exec()
 
-        return user ? user.comparePassword(passwd) : false;
+        if(user.comparePassword(passwd)) return user;
+        
+        return null;
     } catch (error) {
         throw new Error(error)
     }
