@@ -36,6 +36,16 @@ router.post("/update", async (req, res) => {
     }
 })
 
+router.post("/member/update", async (req, res) => {
+    try{
+        const result = await ChatController.memberUpdate(MappingHelper(ChatViewModel, req.body));
+        res.json(result);
+    }
+    catch(error){
+        res.status(ExceptionHelper.ExceptionStatus.ERROR);
+    }
+})
+
 router.delete("/delete/:id", async (req, res) => {
     try{
         const result = await ChatController.remove(req.params.id);

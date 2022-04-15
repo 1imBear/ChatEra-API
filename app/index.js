@@ -54,7 +54,6 @@ app.use(express.json());
 
 app.use('/auth', userAuth);
 app.use('/chat', routers.chat);
-app.use('/member', routers.member);
 app.use('/message', routers.message);
 /*
     TODO: Handle root directory
