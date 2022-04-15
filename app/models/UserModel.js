@@ -28,16 +28,8 @@ var User = new mongoose.Schema({
 
 User.pre('save', function (next) {
     if (!this.isModified('Password')) return next();
-    HashingHelper.HashPassword(this.Password).then(result => {
-        this.Password = result
-        next();
-    }).catch(error => {
-        throw error;
-    });
+    this.Password = HashingHelper.HashPassword(this.Password)
+    next();
 })
-
-User.methods.comparePassword = async function (passwd) {
-    return HashingHelper.ComparePassword(this.Password, passwd);
-};
 
 export default mongoose.model(DataModelHelper.User, User)

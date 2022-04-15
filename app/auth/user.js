@@ -5,8 +5,8 @@ import UserRepository from "../repo/UserRepository";
 
 const UserAuthentication = async ({UserName, Password}) => {
     try{
-        const isValid = await UserRepository.DefaultAuthor(UserName, Password);
-        return isValid ?  ExceptionViewModel(ExceptionHelper.User.Auth.OK, ExceptionHelper.ExceptionStatus.OK) : ExceptionViewModel(ExceptionHelper.User.Auth.FAIL, ExceptionHelper.ExceptionStatus.ERROR);
+        const result = await UserRepository.DefaultAuthor(UserName, Password);
+        return result ?  ExceptionViewModel(ExceptionHelper.User.Auth.OK, ExceptionHelper.ExceptionStatus.OK, result) : ExceptionViewModel(ExceptionHelper.User.Auth.FAIL, ExceptionHelper.ExceptionStatus.ERROR);
     }
     catch(error){
         return ExceptionViewModel(error.message, ExceptionHelper.ExceptionStatus.ERROR)

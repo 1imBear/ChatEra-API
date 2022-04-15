@@ -1,4 +1,5 @@
 import "regenerator-runtime/runtime";
+import HashingHelper from "../helper/HashingHelper";
 import UserModel from "../models/UserModel"
 
 const DefaultAuthor = async (userName, passwd) => {
@@ -6,13 +7,15 @@ const DefaultAuthor = async (userName, passwd) => {
         var user = await UserModel.findOne({
             UserName : userName,
         })
-        .select({
-            _id: 1,
-            PublicKey: 1
-        })
         .exec()
 
-        if(user.comparePassword(passwd)) return user;
+        if(HashingHelper.ComparePassword(user.Password, passwd)){
+            return {
+                id: user._id,
+                PublicKey: user.PublicKey,
+                Name: user.Name
+            };
+        }
         
         return null;
     } catch (error) {
