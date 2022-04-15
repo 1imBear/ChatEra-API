@@ -1,10 +1,42 @@
 import { ObjectId } from "mongodb";
 import "regenerator-runtime/runtime";
+import DataModelHelper from "../helper/DataModelHelper";
 import ChatModel from "../models/ChatModel";
-import MemberModel from "../models/MemberModel";
-import MessageModel from "../models/MessageModel";
-import MemberRepository from "./MemberRepository";
 import MessageRepository from "./MessageRepository";
+
+const GetAllById = async (id) => {
+    try {
+        var chat = ChatModel
+        .aggregate([
+            { $match: { Members: id } },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "Members",
+                    foreignField: "PublicKey",
+                    as: "Members",
+                },
+            },
+            {
+                $project:{
+                    _id: 0,
+                    id: "$_id",
+                    Name: 1,
+                    DateUpdate: 1,
+                    Members : {
+                        Name: 1,
+                        PublicKey: 1
+                    },
+                }
+            }
+        ])
+        .exec()
+
+        return chat;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
 
 const GetOneById = async (id) => {
     try {    
@@ -28,7 +60,8 @@ const GetOneById = async (id) => {
 const CreateOne = async (chatViewModel) => {
     try {
         var chat = new ChatModel({
-            Name : chatViewModel.Name,
+            Name: chatViewModel.Name,
+            Members: chatViewModel.Members
         });
 
         await chat.save();
@@ -58,26 +91,11 @@ const UpdateOneById = async (chatViewModel) => {
     }
 }
 
-const UpdateMemberById = async (id) => {
+const UpdateMemberById = async (chatViewModel) => {
     try {
-        var members = await MemberModel.find({
-            ChatId : new ObjectId(id)
-        })
-        .select({
-            _id: 1
-        })
-        .exec();
-
-        var messages = await MessageModel.find({
-            ChatId : new ObjectId(id)
-        })
-        .select({
-            _id: 1
-        })
-        .exec();
-        
+ 
         var chat = await ChatModel.findOne({
-            _id: id
+            _id: new ObjectId(chatViewModel.id)
         })
         .select({
             Members: 1
@@ -85,8 +103,16 @@ const UpdateMemberById = async (id) => {
         .exec();
 
         if(chat){
-            chat.Members = members;
-            chat.Messages = messages;
+            for (let i = 0; i < chatViewModel.Members.length; i++) {
+                var value = chatViewModel.Members[i]
+                var index = await chat.Members.findIndex(key => key == value)
+                if(index > 0){
+                    chat.Members.splice(index,1);
+                    break;
+                }
+                chat.Members.push(value);
+                
+            }
             await chat.save();
     
             return true;
@@ -104,7 +130,6 @@ const DeleteOneById = async (id) => {
             _id: new ObjectId(id),
         })
         
-        result = await MemberRepository.DeleteAllbyId(id);
         result = await MessageRepository.DeleteAllById(id);
 
         return result;
@@ -114,6 +139,7 @@ const DeleteOneById = async (id) => {
 }
 
 export default {
+    GetAllById,
     GetOneById,
     CreateOne,
     UpdateOneById,

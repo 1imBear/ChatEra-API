@@ -12,13 +12,9 @@ var Chat = new mongoose.Schema({
         default: () => { return Date.now() }
     },
     Members: [{
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: DataModelHelper.Member
+        type: String,
+        ref: DataModelHelper.User
     }],
-    Messages: [{
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: DataModelHelper.Message
-    }]
 })
 
 Chat.pre('save', function (next) {
