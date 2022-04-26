@@ -7,52 +7,14 @@ import routers from "./routers";
 import path from "path";
 import fs from "fs";
 import db from "./repo";
+import Socket from "./plugin/socket.io"
 
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 
-// app.use('/', (res, req) => {
-//     const requestStart = Date.now();
-
-//     let errorMessage = null;
-//     let body = [];
-//     req.on("data", chunk => {
-//       body.push(chunk);
-//     });
-//     req.on("end", () => {
-//       body = Buffer.concat(body);
-//       body = body.toString();
-//     });
-//     req.on("error", error => {
-//       errorMessage = error.message;
-//     });
-  
-//     res.on("finish", () => {
-//       const { rawHeaders, httpVersion, method, socket, url } = req;
-//       const { remoteAddress, remoteFamily } = socket;
-  
-//       console.log(
-//         JSON.stringify({
-//           timestamp: Date.now(),
-//           processingTime: Date.now() - requestStart,
-//           rawHeaders,
-//           body,
-//           errorMessage,
-//           httpVersion,
-//           method,
-//           remoteAddress,
-//           remoteFamily,
-//           url
-//         })
-//       );
-//     });
-  
-//     process(res, req);
-// })
-
 app.use('/auth', userAuth);
+app.use('/user', routers.user)
 app.use('/chat', routers.chat);
 app.use('/message', routers.message);
 /*
@@ -67,6 +29,8 @@ const sslServer = https.createServer({
         fs.readFileSync(path.join("cert", "rootCA.crt")),
     ]
 }, app);
+
+Socket(sslServer);
 
 sslServer.listen(process.env.PORT, async () => {
     console.log(`HTTPs : ${process.env.PORT} is on live `);

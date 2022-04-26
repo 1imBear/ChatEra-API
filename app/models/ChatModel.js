@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 import DataModelHelper from "../helper/DataModelHelper";
 
 var Chat = new mongoose.Schema({
-    Name: {
+    Title: {
         type: String,
         required: true
     },
@@ -15,6 +15,14 @@ var Chat = new mongoose.Schema({
         type: String,
         ref: DataModelHelper.User
     }],
+    ChatType: {
+        type: Number,
+        enum: {
+           values: [0, 1],
+           message: "{Value} is not support"
+        },
+        default: 0
+    }
 })
 
 Chat.pre('save', function (next) {

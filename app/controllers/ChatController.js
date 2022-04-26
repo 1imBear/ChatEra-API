@@ -13,8 +13,8 @@ const getAllById = async (id) => {
 
 const create = async (chatViewModel) => {
     try {
-        const ok = await ChatRepository.CreateOne(chatViewModel);
-        return ok ? ExceptionViewModel(ExceptionHelper.Chat.Create.OK, ExceptionHelper.ExceptionStatus.OK) : ExceptionViewModel(ExceptionHelper.Chat.Create.FAIL, ExceptionHelper.ExceptionStatus.FAIL);
+        const result = await ChatRepository.CreateOne(chatViewModel);
+        return result ? ExceptionViewModel(ExceptionHelper.Chat.Create.OK, ExceptionHelper.ExceptionStatus.OK, result) : ExceptionViewModel(ExceptionHelper.Chat.Create.FAIL, ExceptionHelper.ExceptionStatus.FAIL);
     } catch (error) {
         return ExceptionViewModel(error.message, ExceptionHelper.ExceptionStatus.ERROR)
     }
@@ -22,8 +22,8 @@ const create = async (chatViewModel) => {
 
 const update = async (chatViewModel) => {
     try {
-        var ok = await ChatRepository.UpdateOneById(chatViewModel);
-        return ok ? ExceptionViewModel(ExceptionHelper.Chat.Updare.OK, ExceptionHelper.ExceptionStatus.OK) : ExceptionViewModel(ExceptionHelper.Chat.Updare.FAIL, ExceptionHelper.ExceptionStatus.FAIL);
+        var result = await ChatRepository.UpdateOneById(chatViewModel);
+        return ExceptionViewModel(ExceptionHelper.Chat.Updare.OK, ExceptionHelper.ExceptionStatus.OK, result);
     } catch (error) {
         return ExceptionViewModel(error.message, ExceptionHelper.ExceptionStatus.ERROR)
     }

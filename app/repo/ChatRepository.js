@@ -18,10 +18,11 @@ const GetAllById = async (id) => {
                 },
             },
             {
-                $project:{
+                $project: {
                     _id: 0,
                     id: "$_id",
-                    Name: 1,
+                    Title: 1,
+                    ChatType: 1,
                     DateUpdate: 1,
                     Members : {
                         Name: 1,
@@ -60,8 +61,8 @@ const GetOneById = async (id) => {
 const CreateOne = async (chatViewModel) => {
     try {
         var chat = new ChatModel({
-            Name: chatViewModel.Name,
-            Members: chatViewModel.Members
+            Title: chatViewModel.Title,
+            Members: chatViewModel.Members,
         });
 
         await chat.save();
@@ -80,7 +81,7 @@ const UpdateOneById = async (chatViewModel) => {
         .exec();
         
         if(chat){
-            chat.Name = chatViewModel.Name;
+            chat.Title = chatViewModel.Title;
             await chat.save();
             return true;
         }
@@ -115,9 +116,8 @@ const UpdateMemberById = async (chatViewModel) => {
             }
             await chat.save();
     
-            return true;
         }
-        return false;
+        return true;
     } catch (error) {
         throw new Error(error);
     }

@@ -8,8 +8,12 @@ const GetAllById = async (id) => {
             Chat: id
         })
         .select({
+            _id: 0,
+            id: "$_id",
+            ChatId: "$Chat",
             PublicKey: 1,
             Content: 1,
+            DateUpdate: 1,
         })
         .sort({
             DateUpdate: 1
@@ -22,17 +26,17 @@ const GetAllById = async (id) => {
     }
 }
 
-const CreateOne = async (memberViewModel) => {
+const CreateMany = async (messages) => {
     try {  
-        for (let i = 0; i < memberViewModel.Messages.length; i++) {
+        for (let i = 0; i < messages.length; i++) {
             var message = new MessageModel({
-                Chat: memberViewModel.id,
-                PublicKey: memberViewModel.PublicKey,
-                Content: memberViewModel.Messages[i]
+                Chat: messages[i].ChatId,
+                PublicKey: messages[i].PublicKey,
+                Content: messages[i].Content
             })
             await message.save();
+            
         }
-        
         return true;
     } catch (error) {
         throw new Error(error);
@@ -52,6 +56,6 @@ const DeleteAllById = async (id) => {
 
 export default {
     GetAllById,
-    CreateOne,
+    CreateMany,
     DeleteAllById,
 }

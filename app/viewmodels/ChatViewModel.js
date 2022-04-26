@@ -1,7 +1,8 @@
 const chatViewModel = {
     id: String,
     Members: Array,
-    Name: String
+    Title: String,
+    ChatType: Number
 }
 
 export default chatViewModel
