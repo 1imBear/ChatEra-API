@@ -1,6 +1,8 @@
 import "regenerator-runtime";
 //import bcrypt from "bcrypt";
-import { scryptSync, ramdomBytes, randomBytes, timingSafeEqual } from "crypto";
+import { scryptSync, randomBytes, timingSafeEqual } from "crypto";
+
+const key16 = randomBytes(16).toString('hex');
 
 const HashPassword = (passwd) => {
     const salt = randomBytes(16).toString('hex');
@@ -14,6 +16,7 @@ const ComparePassword = (hash, passwd) => {
     const keyBuffer = Buffer.from(key, 'hex');
     return timingSafeEqual(hashBuffer, keyBuffer);
 }
+
 
 // const HashPassword = async (passwd, saltRound = 10) => {
 //     try {

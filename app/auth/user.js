@@ -19,7 +19,9 @@ const UserSignUp = async (userViewModel) => {
         return ExceptionViewModel(ExceptionHelper.User.Create.OK, ExceptionHelper.ExceptionStatus.OK);
     }
     catch(error){
-        if(error.message.indexOf("11000") != -1) return ExceptionViewModel(ExceptionHelper.User.Create.UNIQUE, ExceptionHelper.ExceptionStatus.ERROR)
+        if(error.message.indexOf("11000") != -1)
+            return ExceptionViewModel(ExceptionHelper.User.Create.UNIQUE, ExceptionHelper.ExceptionStatus.ERROR)
+
         return ExceptionViewModel(error.message, ExceptionHelper.ExceptionStatus.ERROR)
     }
 }

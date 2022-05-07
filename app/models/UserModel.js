@@ -23,7 +23,7 @@ var User = new mongoose.Schema({
         unique: true,
         required: true,
         default: () => { return crypto.randomBytes(16).toString('hex') }
-    },
+    }
 })
 
 User.pre('save', function (next) {

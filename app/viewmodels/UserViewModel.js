@@ -3,6 +3,7 @@ const UserViewModel = {
     UserName: String,
     Password: String,
     Name: String,
+    PublicKey: String,
 }
 
 export default UserViewModel

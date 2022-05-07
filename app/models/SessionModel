@@ -1,0 +1,21 @@
+import mongoose from "mongoose"
+import DataModelHelper from "../helper/DataModelHelper";
+
+var Session = new mongoose.Schema({
+    DateCreate: {
+        type: Date,
+        require: true,
+        default: () => { return Date.now() }
+    },
+    DateExpire: {
+        type: Date,
+        required: true,
+        default: () => { 
+            var expire = new Date
+            expire.setHours(expire.getHours() + 24);
+            return expire
+         }
+    }
+})
+
+export default mongoose.model(DataModelHelper.Session, Session)

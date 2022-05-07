@@ -26,6 +26,22 @@ const GetAllById = async (id) => {
     }
 }
 
+const CreateOne = async (message) => {
+    try {  
+
+        var message = new MessageModel({
+            Chat: message.ChatId,
+            PublicKey: message.PublicKey,
+            Content: message.Content
+        })
+        await message.save();
+
+        return true;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
 const CreateMany = async (messages) => {
     try {  
         for (let i = 0; i < messages.length; i++) {
@@ -35,7 +51,6 @@ const CreateMany = async (messages) => {
                 Content: messages[i].Content
             })
             await message.save();
-            
         }
         return true;
     } catch (error) {
@@ -56,6 +71,7 @@ const DeleteAllById = async (id) => {
 
 export default {
     GetAllById,
+    CreateOne,
     CreateMany,
     DeleteAllById,
 }

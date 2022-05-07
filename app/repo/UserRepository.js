@@ -8,6 +8,9 @@ const DefaultAuthor = async (userName, passwd) => {
             UserName : userName,
         })
         .exec()
+        
+        if(user == null)
+            return null
 
         if(HashingHelper.ComparePassword(user.Password, passwd)){
             return {
@@ -60,6 +63,26 @@ const GetOneByUserName = async (username) => {
     }
 }
 
+const GetAllByName = async (publicKey, name) => {
+    try {
+        const user = await UserModel.find({
+             PublicKey: { $ne: publicKey },
+             Name: { $regex: `.*${name}*.` }
+            })
+            .select({
+                _id: 0,
+                Name: 1,
+                PublicKey: 1
+            })
+            .exec();
+
+        return user;          
+
+    } catch (error) {
+        return new Error(error)
+    }
+}
+
 const CreateOne = async (userViewModel) => {
     try {
         var user = new UserModel({
@@ -80,5 +103,6 @@ export default {
     DefaultAuthor,
     GetOneById,
     GetOneByUserName,
+    GetAllByName,
     CreateOne,
 }
