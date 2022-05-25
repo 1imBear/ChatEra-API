@@ -6,19 +6,6 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 
 const connect = async () => {
   try {
-    // mongoose.connection.on('connecting', () => { 
-    //   console.log('mongodb is connecting')
-    // });
-    // mongoose.connection.on('connected', () => {
-    //   console.log('mongodb is connected');
-    // });
-    // mongoose.connection.on('disconnecting', () => {
-    //   console.error('mongodb is disconnecting');
-    // });
-    // mongoose.connection.on('disconnected', () => {
-    //   console.error('mongodb is disconnected');
-    // });
-
     mongoose.connect(process.env.MONGODB_CLIENT, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -29,13 +16,13 @@ const connect = async () => {
       keepAliveInitialDelay: 300000
     }, function(err, db) {
       if (err) {
-          console.log(`%c Unable to connect to MongoDB server`);
+          console.log(`\n\x1b[40,31mUnable to connect to MongoDB server\x1b[0m`);
       } else {
-          console.log('\x1b[0;32mConnected to MongoDB successfully!\x1b[0m');
+          console.log('\n\x1b[0;32mConnected to MongoDB successfully!\x1b[0m');
       }
   });
   } catch (error) {
-    console.error('\nDatabase configuration error')
+    console.error('\n\x1b[40,31mDatabase configuration error\x1b[0m')
   }
 
 } 

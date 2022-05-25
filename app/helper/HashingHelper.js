@@ -1,8 +1,8 @@
-import "regenerator-runtime";
 //import bcrypt from "bcrypt";
+import "regenerator-runtime";
 import { scryptSync, randomBytes, timingSafeEqual } from "crypto";
 
-const key16 = randomBytes(16).toString('hex');
+const base64Key16 = randomBytes(16).toString('base64');
 
 const HashPassword = (passwd) => {
     const salt = randomBytes(16).toString('hex');
@@ -38,5 +38,6 @@ const ComparePassword = (hash, passwd) => {
 
 export default {
     HashPassword,
-    ComparePassword
+    ComparePassword,
+    key16: base64Key16
 }

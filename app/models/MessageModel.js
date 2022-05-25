@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 import DataModelHelper from "../helper/DataModelHelper";
 
 var Message = new mongoose.Schema({
-    Chat:{
+    ChatId:{
         type: mongoose.SchemaTypes.ObjectId,
         ref: DataModelHelper.Chat,
         required: true,

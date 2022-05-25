@@ -1,6 +1,5 @@
 import { ObjectId } from "mongodb";
 import "regenerator-runtime/runtime";
-import DataModelHelper from "../helper/DataModelHelper";
 import ChatModel from "../models/ChatModel";
 import MessageRepository from "./MessageRepository";
 
@@ -60,14 +59,26 @@ const GetOneById = async (id) => {
 
 const CreateOne = async (chatViewModel) => {
     try {
-        var chat = new ChatModel({
-            Title: chatViewModel.Title,
-            Members: chatViewModel.Members,
-        });
 
-        await chat.save();
+        var chat = await GetAllById(chatViewModel.Members[0])
+        chat = await chat.find(key => key.Members.some(_key => _key.PublicKey == chatViewModel.Members[1]))
+        var id = null
 
-        return chat._id
+        if(chat != null){
+            id = chat.id
+        }
+
+        if(chat == undefined || chat == null) {
+            chat = new ChatModel({
+                Title: chatViewModel.Title,
+                Members: chatViewModel.Members,
+            });
+
+            await chat.save();
+            id = chat._id
+        }
+
+        return id
     } catch (error) {
         throw new Error(error);
     }

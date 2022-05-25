@@ -84,14 +84,13 @@ const GetAllByName = async (publicKey, name) => {
 }
 
 const CreateOne = async (userViewModel) => {
+    var user = new UserModel({
+        UserName : userViewModel.UserName,
+        Password : userViewModel.Password,
+        Name : userViewModel.Name
+    });  
     try {
-        var user = new UserModel({
-            UserName : userViewModel.UserName,
-            Password : userViewModel.Password,
-            Name : userViewModel.Name
-        });  
         await user.save();
-
 
         return true;
     } catch (error) {

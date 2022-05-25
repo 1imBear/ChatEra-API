@@ -8,8 +8,8 @@ const router = Router();
 
 router.get("/getall/:id", async (req, res) => {
     try{
-        const result = await ChatController.getAllById(req.params.id);
-        res.json(result);
+        const response = await ChatController.getAllById(req.params.id);
+        res.json(response);
     }
     catch(error){
         res.status(ExceptionHelper.ExceptionStatus.ERROR);
@@ -18,8 +18,8 @@ router.get("/getall/:id", async (req, res) => {
 
 router.post("/create", async (req, res) => {
     try{
-        const result = await ChatController.create(MappingHelper(ChatViewModel, req.body));
-        res.json(result);
+        const response = await ChatController.create(MappingHelper(ChatViewModel, req.body));
+        res.json(response);
     }
     catch(error){
         res.status(ExceptionHelper.ExceptionStatus.ERROR);
@@ -28,8 +28,8 @@ router.post("/create", async (req, res) => {
 
 router.post("/update", async (req, res) => {
     try{
-        const result = await ChatController.update(MappingHelper(ChatViewModel, req.body));
-        res.json(result);
+        const response = await ChatController.update(MappingHelper(ChatViewModel, req.body));
+        res.json(reresponsesult);
     }
     catch(error){
         res.status(ExceptionHelper.ExceptionStatus.ERROR);
@@ -38,8 +38,8 @@ router.post("/update", async (req, res) => {
 
 router.post("/member/update", async (req, res) => {
     try{
-        const result = await ChatController.memberUpdate(MappingHelper(ChatViewModel, req.body));
-        res.json(result);
+        const response = await ChatController.memberUpdate(MappingHelper(ChatViewModel, req.body));
+        res.json(response);
     }
     catch(error){
         res.status(ExceptionHelper.ExceptionStatus.ERROR);
@@ -48,8 +48,8 @@ router.post("/member/update", async (req, res) => {
 
 router.delete("/delete/:id", async (req, res) => {
     try{
-        const result = await ChatController.remove(req.params.id);
-        res.json(result);
+        const response = await ChatController.remove(req.params.id);
+        res.json(response);
     }
     catch(error){
         res.status(ExceptionHelper.ExceptionStatus.ERROR);

@@ -23,6 +23,12 @@ var User = new mongoose.Schema({
         unique: true,
         required: true,
         default: () => { return crypto.randomBytes(16).toString('hex') }
+    },
+    DateCreate: {
+        type: Date,
+        immutable: true,
+        require: true,
+        default: () => { return Date.now() }
     }
 })
 

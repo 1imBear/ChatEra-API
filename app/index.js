@@ -46,15 +46,10 @@ const io = new Server().listen(httpsServer, {
       }
 })
 
-//Main Socket
 sockets(io);
 
-// Socket io Test
-//app.use(express.static(path.join(__dirname, 'view')));
-// import socket2 from "./plugin/socket_test"
-// socket2(io)
-
 httpsServer.listen(port, async () => {
-    console.log(`\n\x1b[0;32mHTTPs : ${port} is online \x1b[0m\n\x1b[0;36mStart time: ${today} \x1b[0m\n`);
+    console.log(`\n\x1b[0;32mHTTPs : ${port} is online\x1b[0;`);
     await db.connect();
+    console.log(`\x1b[0m\n\x1b[0;36mStart time: ${today} \x1b[0m`);
 });

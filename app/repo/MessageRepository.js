@@ -5,12 +5,12 @@ import MessageModel from "../models/MessageModel";
 const GetAllById = async (id) => {
     try {  
         var messages = await MessageModel.find({
-            Chat: id
+            ChatId: id
         })
         .select({
             _id: 0,
             id: "$_id",
-            ChatId: "$Chat",
+            ChatId: "$ChatId",
             PublicKey: 1,
             Content: 1,
             DateUpdate: 1,
@@ -30,7 +30,7 @@ const CreateOne = async (message) => {
     try {  
 
         var message = new MessageModel({
-            Chat: message.ChatId,
+            ChatId: message.ChatId,
             PublicKey: message.PublicKey,
             Content: message.Content
         })
