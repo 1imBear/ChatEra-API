@@ -96,6 +96,8 @@ const CreateOne = async (userViewModel) => {
     } catch (error) {
         throw new Error(error);
     }
+
+
 }
 
 export default {

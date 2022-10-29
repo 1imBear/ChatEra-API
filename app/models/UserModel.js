@@ -15,7 +15,13 @@ var User = new mongoose.Schema({
     },
     Password: {
         type: String,
-        require: true
+        validate: {
+            validator: function(v) {
+                return v != null && v != undefined && v != "" && v != " "
+            },
+            message: props => 'Password is require'
+        },
+        require: [true, "Password is require"]
     },
     PublicKey: {
         type: String,
@@ -33,6 +39,7 @@ var User = new mongoose.Schema({
 })
 
 User.pre('save', function (next) {
+
     if (!this.isModified('Password')) return next();
     this.Password = HashingHelper.HashPassword(this.Password)
     next();
